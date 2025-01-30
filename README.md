@@ -16,3 +16,7 @@ bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+Then, download a copy of Llamafile here: [https://github.com/Mozilla-Ocho/llamafile](https://github.com/Mozilla-Ocho/llamafile).
+
+Once you have downloaded, updated permissions, and run the .llamafile, it will automatically setup a server at http://localhost:8080. You are now able to ask prompts at /prompts.
