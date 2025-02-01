@@ -2,7 +2,11 @@
 
 import { useState } from 'react';
 
-export default function HomePage() {
+// const res = await fetch('/api/prompts');
+// const data = await res.json();
+// console.log(data.logs); // display previous prompt/response history
+
+export default function CreatePrompt() {
   const [prompt, setPrompt] = useState('');
   const [response, setResponse] = useState('');
   const [loading, setLoading] = useState(false);
