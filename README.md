@@ -1,5 +1,5 @@
 # boost-mailer
-Create emails, manage lists, and send mail to your audience.
+Create emails, manage lists, send mail, and ask prompts with [Llamafile](https://github.com/Mozilla-Ocho/llamafile) to get information about your audience.
 
 ## Getting Started
 
@@ -15,8 +15,10 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to view the app.
 
-Then, download a copy of Llamafile here: [https://github.com/Mozilla-Ocho/llamafile](https://github.com/Mozilla-Ocho/llamafile).
+## Llamafile Server
+
+Download a copy of Llamafile here: [https://github.com/Mozilla-Ocho/llamafile](https://github.com/Mozilla-Ocho/llamafile).
 
 Once you have downloaded, updated permissions, and run the .llamafile, it will automatically setup a server at http://localhost:8080. You are now able to ask prompts at /prompts.
