@@ -1,6 +1,6 @@
 # boost-mailer
 
-![Boost Mailer logo](/public/boost-mailer-logo-dark.png)
+<img src="/public/boost-mailer-logo-dark.png" width="170" height="170" alt="Boost Mailer logo">
 
 Create emails, manage lists, send mail, and ask prompts with [Llamafile](https://github.com/Mozilla-Ocho/llamafile) to get information about your audience.
 
