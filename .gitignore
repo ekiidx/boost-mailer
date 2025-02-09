@@ -44,3 +44,4 @@ next-env.d.ts
 
 # Ignore Python virtual environment
 python/venv/
+/src/generated/prisma
