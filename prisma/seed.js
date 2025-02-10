@@ -4,13 +4,29 @@ const prisma = new PrismaClient();
 async function main() {
     const emailsData = [
         {
+            senderName: 'John Smith',
+            senderEmail: 'john@smith.com',
+            recipient: 'Me',
             subject: 'Email Subject',
             content: 'This is a sample email.',
-            published: true,
+            isRead: false,
+            isStarred: false,
+            isArchived: false,
+            isDeleted: false,
+            dateReceived: new Date('2025-07-10T09:00:00Z'),
+            published: true
         },
         {
+            senderName: 'Jack Black',
+            senderEmail: 'jack@black.com',
+            recipient: 'Me',
             subject: 'Second Email Subject',
             content: 'This is also a sample email.',
+            isRead: false,
+            isStarred: false,
+            isArchived: false,
+            isDeleted: false,
+            dateReceived: new Date('2025-07-15T13:45:00Z'),
             published: true,
         }
     ];
