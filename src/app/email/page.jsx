@@ -1,3 +1,6 @@
+'use client'
+
+import { useState } from 'react'
 import { AppSidebar } from "@/components/app-sidebar"
 import {
   Breadcrumb,
@@ -15,19 +18,15 @@ import {
 } from "@/components/ui/sidebar"
 
 export default function Page() {
+  const [selectedEmail, setSelectedEmail] = useState(null)
+
   return (
-    <SidebarProvider
-      style={
-        {
-          "--sidebar-width": "350px"
-        }
-      }>
-      <AppSidebar />
+    <SidebarProvider style={{ "--sidebar-width": "350px" }}>
+      <AppSidebar onEmailSelect={setSelectedEmail} />
       <SidebarInset>
-        <header
-          className="bg-background sticky top-0 flex shrink-0 items-center gap-2 border-b p-4">
+        <header className="bg-background sticky top-0 flex items-center gap-2 border-b p-4">
           <SidebarTrigger className="-ml-1" />
-          <Separator orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4" />
+          <Separator orientation="vertical" className="mr-2 h-4" />
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
@@ -35,17 +34,29 @@ export default function Page() {
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
-                <BreadcrumbPage>Inbox</BreadcrumbPage>
+                <BreadcrumbPage>{selectedEmail?.subject || 'Inbox'}</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
         </header>
+
         <div className="flex flex-1 flex-col gap-4 p-4">
-          {Array.from({ length: 24 }).map((_, index) => (
-            <div key={index} className="bg-muted/50 aspect-video h-12 w-full rounded-lg" />
-          ))}
+          {selectedEmail ? (
+            <div className="bg-white border rounded-lg p-6 shadow-sm">
+              <h2 className="text-xl font-semibold mb-2">{selectedEmail.subject}</h2>
+              <p className="text-sm text-muted-foreground mb-4">
+                From: {selectedEmail.senderName} ({selectedEmail.senderEmail})<br />
+                Received: {new Date(selectedEmail.dateReceived).toLocaleString()}
+              </p>
+              <div className="whitespace-pre-wrap text-base leading-relaxed">
+                {selectedEmail.content || 'No content'}
+              </div>
+            </div>
+          ) : (
+            <p className="text-muted-foreground">Select an email to view its contents</p>
+          )}
         </div>
       </SidebarInset>
     </SidebarProvider>
-  );
+  )
 }
