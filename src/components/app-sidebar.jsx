@@ -1,7 +1,7 @@
 "use client"
 
-import React, { useEffect } from "react"
-import { ArchiveX, Flame, Inbox, Send, Trash2 } from "lucide-react"
+import React, { useEffect, useState } from "react"
+import { ArchiveX, Command, Inbox, Send, Trash2 } from "lucide-react"
 
 import { NavUser } from "@/components/nav-user"
 import { Label } from "@/components/ui/label"
@@ -22,20 +22,37 @@ import { Switch } from "@/components/ui/switch"
 
 const data = {
   user: {
-    name: "BM",
-    email: "boostmailer@vuedesign.co",
+    name: "shadcn",
+    email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
   navMain: [
-    { title: "Inbox", url: "#", icon: Inbox, isActive: true },
-    { title: "Sent", url: "#", icon: Send, isActive: false },
-    { title: "Trash", url: "#", icon: Trash2, isActive: false },
+    {
+      title: "Inbox",
+      url: "#",
+      icon: Inbox,
+      isActive: true,
+    },
+    {
+      title: "Sent",
+      url: "#",
+      icon: Send,
+      isActive: false,
+    },
+    {
+      title: "Trash",
+      url: "#",
+      icon: Trash2,
+      isActive: false,
+    },
   ]
 }
 
 export function AppSidebar({ onEmailSelect, ...props }) {
-  const [activeItem, setActiveItem] = React.useState(data.navMain[0])
-  const [mails, setMails] = React.useState([])
+  const [activeItem, setActiveItem] = useState(data.navMain[0])
+  const [mails, setMails] = useState([])
+  const [selectedEmail, setSelectedEmail] = useState(null)
+  const [searchQuery, setSearchQuery] = useState("")
   const { setOpen } = useSidebar()
 
   useEffect(() => {
@@ -47,13 +64,20 @@ export function AppSidebar({ onEmailSelect, ...props }) {
     fetchEmails()
   }, [])
 
+  const filteredMails = mails.filter((mail) => {
+    const sender = mail.senderName?.toLowerCase() || ""
+    const subject = mail.subject?.toLowerCase() || ""
+    const query = searchQuery.toLowerCase()
+    return sender.includes(query) || subject.includes(query)
+  })
+
   return (
     <Sidebar
       collapsible="icon"
       className="overflow-hidden *:data-[sidebar=sidebar]:flex-row"
       {...props}
     >
-      {/* Icon Sidebar */}
+      {/* Mini sidebar (icons) */}
       <Sidebar
         collapsible="none"
         className="w-[calc(var(--sidebar-width-icon)+1px)]! border-r"
@@ -64,8 +88,7 @@ export function AppSidebar({ onEmailSelect, ...props }) {
               <SidebarMenuButton size="lg" asChild className="md:h-8 md:p-0">
                 <a href="#">
                   <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                    {/* <Flame className="size-4" /> */}
-                    <img width="17" height="17" src="/flame.svg" />
+                    <Command className="size-4" />
                   </div>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-medium">Acme Inc</span>
@@ -86,8 +109,6 @@ export function AppSidebar({ onEmailSelect, ...props }) {
                       tooltip={{ children: item.title, hidden: false }}
                       onClick={() => {
                         setActiveItem(item)
-                        const shuffled = [...mails].sort(() => Math.random() - 0.5)
-                        setMails(shuffled.slice(0, Math.max(5, Math.floor(Math.random() * 10) + 1)))
                         setOpen(true)
                       }}
                       isActive={activeItem?.title === item.title}
@@ -107,7 +128,7 @@ export function AppSidebar({ onEmailSelect, ...props }) {
         </SidebarFooter>
       </Sidebar>
 
-      {/* Mail List Sidebar */}
+      {/* Expanded sidebar with email list */}
       <Sidebar collapsible="none" className="hidden flex-1 md:flex">
         <SidebarHeader className="gap-3.5 border-b p-4">
           <div className="flex w-full items-center justify-between">
@@ -119,18 +140,22 @@ export function AppSidebar({ onEmailSelect, ...props }) {
               <Switch className="shadow-none" />
             </Label>
           </div>
-          <SidebarInput placeholder="Type to search..." />
+          <SidebarInput
+            placeholder="Search emails..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </SidebarHeader>
         <SidebarContent>
           <SidebarGroup className="px-0">
             <SidebarGroupContent>
-              {mails.map((mail) => (
+              {filteredMails.map((mail) => (
                 <a
                   href="#"
                   key={mail.id}
-                  onClick={(e) => {
-                    e.preventDefault()
-                    onEmailSelect?.(mail) // <-- notify parent
+                  onClick={() => {
+                    setSelectedEmail(mail)
+                    onEmailSelect?.(mail)
                   }}
                   className="hover:bg-sidebar-accent hover:text-sidebar-accent-foreground flex flex-col items-start gap-2 border-b p-4 text-sm leading-tight whitespace-nowrap last:border-b-0"
                 >
@@ -139,9 +164,6 @@ export function AppSidebar({ onEmailSelect, ...props }) {
                     <span className="ml-auto text-xs">{mail.dateReceived}</span>
                   </div>
                   <span className="font-medium">{mail.subject}</span>
-                  <span className="line-clamp-2 w-[260px] text-xs whitespace-break-spaces">
-                    {mail.teaser}
-                  </span>
                 </a>
               ))}
             </SidebarGroupContent>
