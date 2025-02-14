@@ -22,8 +22,8 @@ import { Switch } from "@/components/ui/switch"
 
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
+    name: "BM",
+    email: "boost@vuedesign.co",
     avatar: "/avatars/shadcn.jpg",
   },
   navMain: [
@@ -88,7 +88,8 @@ export function AppSidebar({ onEmailSelect, ...props }) {
               <SidebarMenuButton size="lg" asChild className="md:h-8 md:p-0">
                 <a href="#">
                   <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                    <Command className="size-4" />
+                    {/* <Command className="size-4" /> */}
+                    <img width="17" height="17" src="/flame.svg" />
                   </div>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-medium">Acme Inc</span>
