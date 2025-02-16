@@ -22,19 +22,22 @@ model Client {
 }
 
 model Email {
-  id           Int      @id @default(autoincrement())
-  senderName   String
-  senderEmail  String
-  recipient    String
-  subject      String
-  content      String?
-  isRead       Boolean  @default(false)
-  isStarred    Boolean  @default(false)
-  isArchived   Boolean  @default(false)
-  isDeleted    Boolean  @default(false)
-  dateReceived DateTime @default(now())
-  published    Boolean  @default(false)
-  createdAt    DateTime @default(now())
+  id              Int      @id @default(autoincrement())
+  senderName      String
+  senderEmail     String
+  recipientName   String
+  recipientEmail  String
+  subject         String
+  content         String?
+  isRead          Boolean  @default(false)
+  isSent          Boolean  @default(false)
+  isStarred       Boolean  @default(false)
+  isArchived      Boolean  @default(false)
+  isDeleted       Boolean  @default(false)
+  isDraft         Boolean  @default(false)
+  date            DateTime @default(now())
+  published       Boolean  @default(false)
+  createdAt       DateTime @default(now())
 }
 
 model Prompt {

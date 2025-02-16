@@ -46,7 +46,7 @@ export default function Page() {
               <h2 className="text-xl font-semibold mb-2">{selectedEmail.subject}</h2>
               <p className="text-sm text-muted-foreground mb-4">
                 From: {selectedEmail.senderName} ({selectedEmail.senderEmail})<br />
-                Received: {new Date(selectedEmail.dateReceived).toLocaleString()}
+                Received: {new Date(selectedEmail.date).toLocaleString()}
               </p>
               <div className="whitespace-pre-wrap text-base leading-relaxed">
                 {selectedEmail.content || 'No content'}

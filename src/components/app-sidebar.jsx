@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect, useState } from "react"
-import { ArchiveX, Command, Inbox, Send, Trash2 } from "lucide-react"
+import { ArchiveX, Inbox, Send, Trash2 } from "lucide-react"
 
 import { NavUser } from "@/components/nav-user"
 import { Label } from "@/components/ui/label"
@@ -53,6 +53,7 @@ export function AppSidebar({ onEmailSelect, ...props }) {
   const [mails, setMails] = useState([])
   const [selectedEmail, setSelectedEmail] = useState(null)
   const [searchQuery, setSearchQuery] = useState("")
+  const [showUnreadOnly, setShowUnreadOnly] = useState(false)
   const { setOpen } = useSidebar()
 
   useEffect(() => {
@@ -64,12 +65,34 @@ export function AppSidebar({ onEmailSelect, ...props }) {
     fetchEmails()
   }, [])
 
-  const filteredMails = mails.filter((mail) => {
-    const sender = mail.senderName?.toLowerCase() || ""
-    const subject = mail.subject?.toLowerCase() || ""
-    const query = searchQuery.toLowerCase()
-    return sender.includes(query) || subject.includes(query)
-  })
+const filteredMails = mails.filter((mail) => {
+  const sender = mail.senderName?.toLowerCase() || ""
+  const subject = mail.subject?.toLowerCase() || ""
+  const query = searchQuery.toLowerCase()
+
+  // Match search text
+  const matchesSearch = sender.includes(query) || subject.includes(query)
+
+  // Check which folder we're in
+  let isInFolder = false
+  if (activeItem.title === "Inbox") {
+    isInFolder = !mail.isSent && !mail.isDeleted
+  } else if (activeItem.title === "Sent") {
+    isInFolder = mail.isSent && !mail.isDeleted
+  } else if (activeItem.title === "Trash") {
+    isInFolder = mail.isDeleted
+  } else {
+    isInFolder = true
+  }
+
+  // Filter by unread toggle
+  let matchesUnreadFilter = true
+  if (showUnreadOnly) {
+    matchesUnreadFilter = !mail.isRead
+  }
+
+  return matchesSearch && isInFolder && matchesUnreadFilter
+})
 
   return (
     <Sidebar
@@ -90,10 +113,6 @@ export function AppSidebar({ onEmailSelect, ...props }) {
                   <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                     {/* <Command className="size-4" /> */}
                     <img width="17" height="17" src="/flame.svg" />
-                  </div>
-                  <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-medium">Acme Inc</span>
-                    <span className="truncate text-xs">Enterprise</span>
                   </div>
                 </a>
               </SidebarMenuButton>
@@ -137,8 +156,12 @@ export function AppSidebar({ onEmailSelect, ...props }) {
               {activeItem?.title}
             </div>
             <Label className="flex items-center gap-2 text-sm">
-              <span>Unreads</span>
-              <Switch className="shadow-none" />
+              <span>Unread</span>
+              <Switch
+                className="shadow-none"
+                checked={showUnreadOnly}
+                onCheckedChange={setShowUnreadOnly}
+              />
             </Label>
           </div>
           <SidebarInput
@@ -162,7 +185,7 @@ export function AppSidebar({ onEmailSelect, ...props }) {
                 >
                   <div className="flex w-full items-center gap-2">
                     <span>{mail.senderName}</span>
-                    <span className="ml-auto text-xs">{mail.dateReceived}</span>
+                    <span className="ml-auto text-xs">{mail.date}</span>
                   </div>
                   <span className="font-medium">{mail.subject}</span>
                 </a>
