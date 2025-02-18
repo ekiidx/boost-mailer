@@ -55,40 +55,46 @@ export default function CreatePrompt() {
   };
 
   return (
+    <SidebarProvider style={{ "--sidebar-width": "350px" }}>
+      <div className="flex w-full overflow-x-hidden">
+        <AppSidebar />
+        <SidebarInset className="flex-1 min-w-0">
+          <header className="bg-background sticky top-0 flex items-center gap-2 border-b p-4">
+            <SidebarTrigger className="-ml-1" />
+            <Separator orientation="vertical" className="mr-2 h-4" />
+          </header>
 
+          <div className="flex flex-1 flex-col gap-4 p-4">
+            <div className="bg-white border rounded-lg p-6 shadow-sm">
+              <h1>Llamafile RAG Prompt</h1>
+              <form onSubmit={handleSubmit}>
+                <textarea
+                  rows={5}
+                  cols={50}
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  placeholder="Enter a prompt..."
+                />
+                <br />
+                <button type="submit" disabled={loading}>
+                  {loading ? 'Generating...' : 'Submit'}
+                </button>
+              </form>
 
- <SidebarProvider style={{ "--sidebar-width": "350px" }}>
-      <AppSidebar />
-      <SidebarInset>
-        <header className="bg-background sticky top-0 flex items-center gap-2 border-b p-4">
-          <SidebarTrigger className="-ml-1" />
-          <Separator orientation="vertical" className="mr-2 h-4" />
-        
-        </header>
-        <main style={{ padding: 40 }}>
-          <h1>Llamafile RAG Prompt</h1>
-          <form onSubmit={handleSubmit}>
-            <textarea
-              rows={5}
-              cols={50}
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              placeholder="Enter a prompt..."
-            />
-            <br />
-            <button type="submit" disabled={loading}>
-              {loading ? 'Generating...' : 'Submit'}
-            </button>
-          </form>
-
-          {response && (
-            <div style={{ marginTop: 20 }}>
-              <h3>Response:</h3>
-              <pre>{response}</pre>
+            {response && (
+                <div className="mt-5">
+                  <h3 className="mb-2 font-semibold">Response:</h3>
+                  <pre
+                    className="whitespace-pre-wrap break-words rounded-md bg-gray-100 p-4 text-sm text-gray-800"
+                  >
+                    {JSON.stringify(JSON.parse(response), null, 2)}
+                  </pre>
+                </div>
+              )}
             </div>
-          )}
-        </main>
-      </SidebarInset>
+          </div>
+        </SidebarInset>
+      </div>
     </SidebarProvider>
   )
 }
